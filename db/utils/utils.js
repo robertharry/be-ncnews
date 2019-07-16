@@ -18,5 +18,18 @@ exports.makeRefObj = list => {
 };
 
 exports.formatComments = (comments, articleRef) => {
+    if (comments.length === 0) return []
+
     
+
+
+
 };
+// [{
+//     body:
+//       'The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky.',
+//     belongs_to: 'Living in the shadow of a great man',
+//     created_by: 'butter_bridge',
+//     votes: 14,
+//     created_at: 1479818163389,
+//   }]

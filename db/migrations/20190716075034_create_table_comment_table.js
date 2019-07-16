@@ -4,10 +4,12 @@ exports.up = function (knex) {
     return knex.schema.createTable('comments', (commentsTable) => {
         commentsTable.increments('comment_id').primary();
         commentsTable.string('author').notNullable();
-        commentsTable.string('article_id').notNullable();
+        commentsTable.foreign('author').references('users.username');
+        commentsTable.integer('article_id').notNullable()
+        commentsTable.foreign('article_id').references('articles.article_id');
         commentsTable.integer('votes').defaultTo(0);
-        commentsTable.timestamps();
-        commentsTable.string('body').notNullable();
+        commentsTable.timestamps('created_at');
+        commentsTable.text('body').notNullable();
     });
 };
 

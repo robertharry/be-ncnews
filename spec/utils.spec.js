@@ -35,4 +35,14 @@ describe('makeRefObj', () => {
   })
 });
 
-describe.only('formatComments', () => { });
+describe.only('formatComments', () => {
+  it('returns an array', () => {
+    expect(formatComments([])).to.be.a('array')
+  });
+  it('renames "created_by" key to "author"', () => {
+    const comments = [{ created_by: 'a person' }];
+    const actual = formatComments(comments);
+    const expected = [{ author: 'a person' }];
+    expect(actual).to.eql(expected)
+  });
+});
