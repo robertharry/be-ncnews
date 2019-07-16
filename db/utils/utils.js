@@ -5,6 +5,7 @@ exports.formatDates = input => {
         time.created_at = newTime
         return time
     })
+
     return newArr
 };
 
@@ -19,17 +20,17 @@ exports.makeRefObj = list => {
 
 exports.formatComments = (comments, articleRef) => {
     if (comments.length === 0) return []
-
-    
-
-
-
+    const formatDates = (input) => {
+        return new Date(input)
+    }
+    const newObj = comments.map(comment => {
+        comment.author = comment.created_by
+        delete comment.created_by
+        comment.article_id = comment.belongs_to
+        delete comment.belongs_to
+        comment.article_id = articleRef[comment.article_id]
+        comment.created_at = formatDates(comment.created_at)
+        return comment
+    })
+    return newObj
 };
-// [{
-//     body:
-//       'The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky.',
-//     belongs_to: 'Living in the shadow of a great man',
-//     created_by: 'butter_bridge',
-//     votes: 14,
-//     created_at: 1479818163389,
-//   }]
