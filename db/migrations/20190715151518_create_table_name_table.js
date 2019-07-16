@@ -2,12 +2,13 @@
 exports.up = function (knex) {
     console.log('creating users table...');
     return knex.schema.createTable('users', (usersTable) => {
-        usersTable.string('username').notNullable();
+        usersTable.string('username').primary().references('author');
         usersTable.string('name').notNullable();
         usersTable.string('avatar_url').notNullable();
     })
 };
 
-exports.down = function (knex) {
-
+exports.down = function (knex, Promise) {
+    console.log('removing users tables...');
+    return knex.schema.dropTable('users');
 };

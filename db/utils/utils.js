@@ -1,17 +1,22 @@
-exports.formatDates = list => {
-
-    const newList = list[0][created_at]
-    console.log(newList)
-    return []
-    // {
-    //     body: 'Itaque quisquam est similique et est perspiciatis reprehenderit voluptatem autem. Voluptatem accusantium eius error adipisci quibusdam doloribus.',
-    //     belongs_to: 'The People Tracking Every Touch, Pass And Tackle in the World Cup',
-    //     created_by: 'tickle122',
-    //     votes: -1,
-    //     created_at: 1468087638932,
-    //   }
+exports.formatDates = input => {
+    if (input.length === 0) return []
+    const newArr = input.map(time => {
+        const newTime = new Date(time.created_at)
+        time.created_at = newTime
+        return time
+    })
+    return newArr
 };
 
-exports.makeRefObj = list => { };
+exports.makeRefObj = list => {
+    if (list.length === 0) return {}
+    let refObject = {}
+    for (ref in list) {
+        refObject[list[ref].title] = list[ref].article_id
+    }
+    return refObject
+};
 
-exports.formatComments = (comments, articleRef) => { };
+exports.formatComments = (comments, articleRef) => {
+    
+};
