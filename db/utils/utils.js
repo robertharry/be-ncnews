@@ -5,7 +5,6 @@ exports.formatDates = input => {
         time.created_at = newTime
         return time
     })
-
     return newArr
 };
 
@@ -24,13 +23,13 @@ exports.formatComments = (comments, articleRef) => {
         return new Date(input)
     }
     const newObj = comments.map(comment => {
-        comment.author = comment.created_by
-        delete comment.created_by
-        comment.article_id = comment.belongs_to
-        delete comment.belongs_to
-        comment.article_id = articleRef[comment.article_id]
-        comment.created_at = formatDates(comment.created_at)
-        return comment
+        const { ['created_by']: value, ['belongs_to']: value2, ['created_at']: value3, ...rest } = comment;
+        const secondObj = {
+            ['author']: value,
+            ['article_id']: articleRef[comment.belongs_to],
+            ['created_at']: formatDates(comment.created_at), ...rest
+        }
+        return secondObj
     })
     return newObj
 };

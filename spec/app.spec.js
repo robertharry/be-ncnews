@@ -44,5 +44,13 @@ describe('/API', () => {
                     expect(res.body.article[0]).to.contain.keys('title', 'author', 'votes', 'comment_count')
                 })
         })
+        it('GET/ARTICLES/:article_id updates article vote count and returns article', () => {
+            return request(app)
+                .patch('/api/articles/1')
+                .expect(200)
+                .then(res => {
+                    expect(res.body.article[0].votes).to.equal(5)
+                })
+        })
     })
 })
