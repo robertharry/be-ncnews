@@ -1,8 +1,10 @@
 process.env.NODE_ENV = 'test';
-const { expect } = require('chai');
-const request = require('supertest')
-const app = require('../app')
-const connection = require('../connection')
+const request = require('supertest');
+const app = require('../app');
+const connection = require('../connection');
+const chai = require('chai');
+expect = chai.expect;
+chai.use(require('chai-sorted'));
 
 describe('/API', () => {
     beforeEach(() => connection.seed.run());
@@ -44,12 +46,29 @@ describe('/API', () => {
                     expect(res.body.article[0]).to.contain.keys('title', 'author', 'votes', 'comment_count')
                 })
         })
-        it('GET/ARTICLES/:article_id updates article vote count and returns article', () => {
+        it('GET/ARTICLES/:article_id/comments returns array of comments', () => {
             return request(app)
-                .patch('/api/articles/1')
+                .get('/api/articles/1/comments')
                 .expect(200)
                 .then(res => {
-                    expect(res.body.article[0].votes).to.equal(5)
+                    expect(res.body.article[0]).to.contain.keys('author', 'comment_id', 'votes', 'created_at', 'body')
+                })
+        })
+        it('GET/ARTICLES/:article_id/comments, accepts sorts query by any given column', () => {
+            return request(app)
+                .get('/api/articles/1/comments?sort_by=comment_id')
+                .expect(200)
+                .then(res => {
+                    expect(res.body.article).to.be.sortedBy('comment_id')
+                })
+        })
+        it.only('PATCH/ARTICLES/:article_id, takes an object and in(de)crements the votes by a given value', () => {
+            return request(app)
+                .patch('/api/articles/1')
+                .send({ inc_votes: 1 })
+                .expect(200)
+                .then(res => {
+                    expect(res.body.article[0].votes).to.equal(101)
                 })
         })
     })
