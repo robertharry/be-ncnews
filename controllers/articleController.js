@@ -23,7 +23,7 @@ const getArticleComments = (req, res, next) => {
 
 const addVotes = (req, res, next) => {
     const { article_id } = req.params
-    const { vote_count } = req.body
+    const vote_count = req.body
     patchArticleVotes(vote_count, article_id)
         .then((article) => {
             console.log(article)

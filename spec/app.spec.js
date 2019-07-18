@@ -65,10 +65,10 @@ describe('/API', () => {
         it.only('PATCH/ARTICLES/:article_id, takes an object and in(de)crements the votes by a given value', () => {
             return request(app)
                 .patch('/api/articles/1')
-                .send({ inc_votes: 1 })
+                .send({ inc_votes: -10 })
                 .expect(200)
                 .then(res => {
-                    expect(res.body.article[0].votes).to.equal(101)
+                    expect(res.body.article[0].votes).to.equal(90)
                 })
         })
     })

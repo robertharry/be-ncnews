@@ -22,12 +22,12 @@ const fetchArticleComments = (article_id, sort_by) => {
 }
 
 const patchArticleVotes = (vote_count, article_id) => {
-    console.log('got to patch model')
+
     return connection
         .select('articles.*')
         .from('articles')
         .where('articles.article_id', article_id)
-        .increment('votes', vote_count)
+        .increment('votes', vote_count.inc_votes)
         .returning('*')
 
 
