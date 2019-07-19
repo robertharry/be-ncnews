@@ -8,8 +8,8 @@ app.use("/api", apiRouter);
 app.all('/*', (req, res, next) => res.status(404).send({ msg: 'Route not found' }))
 
 app.use((err, req, res, next) => {
-    console.log('got to app error')
-    res.status(404).send({ msg: 'user not found' })
+    console.log('got to APP middleware error <----------')
+    res.status(404).send({ msg: 'not found' })
 })
 
 module.exports = app;

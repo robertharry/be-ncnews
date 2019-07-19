@@ -9,7 +9,11 @@ const fetchArticlesById = (article_id) => {
         .leftJoin('comments', 'articles.article_id', 'comments.article_id')
         .groupBy('articles.article_id')
         .where('articles.article_id', article_id)
-
+        .then(article => {
+            if (article.length === 0) {
+                return Promise.reject(article)
+            } else return article
+        })
 }
 
 const fetchArticleComments = (article_id, sort_by) => {

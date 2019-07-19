@@ -6,7 +6,11 @@ const fetchUsersById = (input) => {
         .select('*')
         .from('users')
         .where({ username: input })
-        .then()
+        .then(user => {
+            if (user.length === 0) {
+                return Promise.reject(user)
+            } else return user
+        })
 
 }
 

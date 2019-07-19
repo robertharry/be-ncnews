@@ -9,7 +9,7 @@ chai.use(require('chai-sorted'));
 describe('/API', () => {
     beforeEach(() => connection.seed.run());
     after(() => connection.destroy());
-    it('/invalid_route returns Route not found', () => {
+    it('ERROR /invalid_route returns Route not found', () => {
         return request(app)
             .get('/invalidroute')
             .expect(404)
@@ -28,7 +28,7 @@ describe('/API', () => {
                 })
         })
     })
-    describe.only('/USERS', () => {
+    describe('/USERS', () => {
         it('GET /USERS/:username responds with status 200 and username, name and avatar url', () => {
             return request(app)
                 .get('/api/users/butter_bridge')
@@ -38,23 +38,31 @@ describe('/API', () => {
                     expect(res.body.user[0].name).to.equal('jonny')
                 })
         })
-        it('/USERS/invalid username responds with 404, and not found', () => {
+        it('ERROR/USERS/invalid username responds with 404, and not found', () => {
             return request(app)
                 .get('/api/users/invalid_user_id')
                 .expect(404)
                 .then(res => {
-                    expect(res.body.msg).to.equal('user not found')
+                    expect(res.body.msg).to.equal('not found')
                 })
         })
     })
     describe('/ARTICLES', () => {
-        it('GET /ARTICLES/:article_id, responds with 200, article details, and a comment count', () => {
+        it.only('GET/ARTICLES/:article_id, responds with 200, article details, and a comment count', () => {
             return request(app)
                 .get('/api/articles/1')
                 .expect(200)
                 .then(res => {
                     expect(res.body.article[0].author).to.equal('butter_bridge')
                     expect(res.body.article[0]).to.contain.keys('title', 'author', 'votes', 'comment_count')
+                })
+        })
+        it.only('ERROR GET/ARTICLES/:article_id valid format ID provided, but does not exist', () => {
+            return request(app)
+                .get('/api/articles/725')
+                .expect(404)
+                .then(res => {
+                    expect(res.body.msg).to.equal('not found')
                 })
         })
         it('GET/ARTICLES/:article_id/comments returns array of comments', () => {
