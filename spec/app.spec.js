@@ -62,13 +62,32 @@ describe('/API', () => {
                     expect(res.body.article).to.be.sortedBy('comment_id')
                 })
         })
-        it.only('PATCH/ARTICLES/:article_id, takes an object and in(de)crements the votes by a given value', () => {
+        it('PATCH/ARTICLES/:article_id, takes an object and in(de)crements the votes by a given value', () => {
             return request(app)
                 .patch('/api/articles/1')
                 .send({ inc_votes: -10 })
                 .expect(200)
                 .then(res => {
                     expect(res.body.article[0].votes).to.equal(90)
+                })
+        })
+        it('POST/ARTICLES/:article_id/comments, posts a new comment against given article ID', () => {
+            return request(app)
+                .post('/api/articles/1/comments')
+                .send({ username: "butter_bridge", body: "testing my body and my patience" })
+                .expect(201)
+                .then(res => {
+                    expect(res.body.comment[0].author).to.equal("butter_bridge")
+                    expect(res.body.comment[0].body).to.equal("testing my body and my patience")
+                    expect(res.body.comment[0].votes).to.equal(0)
+                })
+        })
+        it('GET/ARTICLES, returns an array of articles with properties', () => {
+            return request(app)
+                .get('/api/articles')
+                .expect(200)
+                .then(res => {
+                    expect(res.body.article[0]).to.contain.keys('author', 'title')
                 })
         })
     })

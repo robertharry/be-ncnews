@@ -29,8 +29,19 @@ const patchArticleVotes = (vote_count, article_id) => {
         .where('articles.article_id', article_id)
         .increment('votes', vote_count.inc_votes)
         .returning('*')
+}
 
+const postComment = (article_id, comment_body, comment_username) => {
+    
+    return connection
+        .insert({ article_id: article_id, body: comment_body, author: comment_username })
+        .into('comments')
+        .returning('*')
 
 }
 
-module.exports = { fetchArticlesById, fetchArticleComments, patchArticleVotes };
+const fetchArticles = () => {
+    console.log('got to fetchArticles model')
+}
+
+module.exports = { fetchArticlesById, fetchArticleComments, fetchArticles, patchArticleVotes, postComment };
