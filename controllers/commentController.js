@@ -1,6 +1,6 @@
-const patchCommentVotes = require('../models/commentModels')
+const { patchCommentVotes, deleteCommentById } = require('../models/commentModels')
 
-const addcommentVotes = (req, res, next) => {
+const addCommentVotes = (req, res, next) => {
     const { comment_id } = req.params
     const vote_count = req.body
     patchCommentVotes(vote_count, comment_id)
@@ -11,4 +11,14 @@ const addcommentVotes = (req, res, next) => {
         .catch(next)
 }
 
-module.exports = addcommentVotes
+const removeComment = (req, res, next) => {
+    console.log('remove comment controller')
+    const { comment_id } = req.params
+    deleteCommentById(comment_id)
+        .then((comment) => {
+
+            res.status(204).send({ comment })
+        })
+}
+
+module.exports = { addCommentVotes, removeComment }

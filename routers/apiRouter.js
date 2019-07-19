@@ -7,7 +7,7 @@ const commentRouter = require('../routers/commentRouter')
 apiRouter.use('/topics', topicRouter);
 apiRouter.use('/users', userRouter);
 apiRouter.use('/articles', articleRouter);
-apiRouter.use('/comments', commentRouter)
+apiRouter.use('/comments', commentRouter);
 
 
 module.exports = apiRouter;

@@ -9,6 +9,14 @@ chai.use(require('chai-sorted'));
 describe('/API', () => {
     beforeEach(() => connection.seed.run());
     after(() => connection.destroy());
+    it('/invalid_route returns Route not found', () => {
+        return request(app)
+            .get('/invalidroute')
+            .expect(404)
+            .then(res => {
+                expect(res.body.msg).to.equal('Route not found')
+            })
+    })
     describe('/TOPICS', () => {
         it('/TOPICS will return an array of topics with status 200, and have keys description and slug', () => {
             return request(app)
@@ -20,7 +28,7 @@ describe('/API', () => {
                 })
         })
     })
-    describe('/USERS', () => {
+    describe.only('/USERS', () => {
         it('GET /USERS/:username responds with status 200 and username, name and avatar url', () => {
             return request(app)
                 .get('/api/users/butter_bridge')
@@ -30,10 +38,13 @@ describe('/API', () => {
                     expect(res.body.user[0].name).to.equal('jonny')
                 })
         })
-        xit('/USERS/invalid username responds with 404, and not found', () => {
+        it('/USERS/invalid username responds with 404, and not found', () => {
             return request(app)
                 .get('/api/users/invalid_user_id')
                 .expect(404)
+                .then(res => {
+                    expect(res.body.msg).to.equal('user not found')
+                })
         })
     })
     describe('/ARTICLES', () => {
@@ -129,8 +140,8 @@ describe('/API', () => {
         xit('DELETE/COMMENTS:comment_id deletes the given comment based on comment_id ', () => {
             return request(app)
                 .delete('/api/comments/1')
-
-
+                .expect(204)
+            //^^^ incomplete testing and model
         })
     })
 })

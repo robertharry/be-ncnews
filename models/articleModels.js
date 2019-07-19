@@ -52,8 +52,6 @@ const fetchArticles = (sort_by, author, topic) => {
         .orderBy(sort_by, 'asc')
         .modify(query => {
             if (author) query.where('articles.author', author)
-        })
-        .modify(query => {
             if (topic) query.where('articles.topic', topic)
         })
 }

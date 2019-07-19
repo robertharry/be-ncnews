@@ -49,7 +49,7 @@ const getAllArticles = (req, res, next) => {
     //console.log(req.query)
     fetchArticles(sort_by, author, topic)
         .then((articles) => {
-            console.log(articles)
+            //console.log(articles)
             res.status(200).send({ articles })
         })
 }
