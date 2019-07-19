@@ -54,7 +54,7 @@ describe('/API', () => {
                     expect(res.body.article[0]).to.contain.keys('author', 'comment_id', 'votes', 'created_at', 'body')
                 })
         })
-        it('GET/ARTICLES/:article_id/comments, accepts sorts query by any given column', () => {
+        it('GET/ARTICLES/:article_id/comments, accepts sort_by query by any given column', () => {
             return request(app)
                 .get('/api/articles/1/comments?sort_by=comment_id')
                 .expect(200)
@@ -87,8 +87,50 @@ describe('/API', () => {
                 .get('/api/articles')
                 .expect(200)
                 .then(res => {
-                    expect(res.body.article[0]).to.contain.keys('author', 'title')
+                    expect(res.body.articles[0]).to.contain.keys('author', 'title', 'comment_count')
                 })
+        })
+        it('GET/ARTICLES, accepts queries of sort_by, defaults to date', () => {
+            return request(app)
+                .get('/api/articles?sort_by=author')
+                .expect(200)
+                .then(res => {
+                    expect(res.body.articles).to.be.sortedBy('author')
+                    expect(res.body.articles[0]).to.contain.keys('title', 'author')
+                })
+        })
+        it('GET/ARTICLES, accepts queries of author, which filters by given author', () => {
+            return request(app)
+                .get('/api/articles?author=rogersop')
+                .expect(200)
+                .then(res => {
+                    expect(res.body.articles[0].author).to.equal('rogersop')
+                })
+        })
+        it('GET/ARTICLES, accepts queries of topic, which filters by given topic', () => {
+            return request(app)
+                .get('/api/articles?topic=cats')
+                .expect(200)
+                .then(res => {
+                    expect(res.body.articles[0].topic).to.equal('cats')
+                })
+        })
+    })
+    describe('/COMMENTS', () => {
+        it('PATCH/COMMENTS:comment_id updates the comments votes value', () => {
+            return request(app)
+                .patch('/api/comments/1')
+                .send({ inc_votes: 20 })
+                .expect(200)
+                .then(res => {
+                    expect(res.body.comment[0].votes).to.equal(36)
+                })
+        })
+        xit('DELETE/COMMENTS:comment_id deletes the given comment based on comment_id ', () => {
+            return request(app)
+                .delete('/api/comments/1')
+
+
         })
     })
 })

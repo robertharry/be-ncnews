@@ -45,8 +45,9 @@ const addCommentToArticle = (req, res, next) => {
 }
 
 const getAllArticles = (req, res, next) => {
-
-    fetchArticles()
+    const { sort_by, author, topic } = req.query
+    //console.log(req.query)
+    fetchArticles(sort_by, author, topic)
         .then((articles) => {
             console.log(articles)
             res.status(200).send({ articles })

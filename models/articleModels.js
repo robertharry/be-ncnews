@@ -32,7 +32,7 @@ const patchArticleVotes = (vote_count, article_id) => {
 }
 
 const postComment = (article_id, comment_body, comment_username) => {
-    
+
     return connection
         .insert({ article_id: article_id, body: comment_body, author: comment_username })
         .into('comments')
@@ -40,8 +40,22 @@ const postComment = (article_id, comment_body, comment_username) => {
 
 }
 
-const fetchArticles = () => {
-    console.log('got to fetchArticles model')
+const fetchArticles = (sort_by, author, topic) => {
+    sort_by = sort_by || 'created_at'
+
+    return connection
+        .select('articles.*')
+        .from('articles')
+        .count({ comment_count: 'comments' })
+        .leftJoin('comments', 'articles.article_id', 'comments.article_id')
+        .groupBy('articles.article_id')
+        .orderBy(sort_by, 'asc')
+        .modify(query => {
+            if (author) query.where('articles.author', author)
+        })
+        .modify(query => {
+            if (topic) query.where('articles.topic', topic)
+        })
 }
 
 module.exports = { fetchArticlesById, fetchArticleComments, fetchArticles, patchArticleVotes, postComment };
